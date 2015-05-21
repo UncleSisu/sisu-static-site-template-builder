@@ -30,8 +30,9 @@ You can search a list of available packages here: https://www.npmjs.org/search?q
 
 Run the following commands in terminal/console as needed. Read comments in `gulpfile.js` for more details.
 
-* `gulp watch` watch files in 'dev' directory and compile them into 'staging' if they change
-* `gulp` or `gulp build` to compile, combine, and minify code into 'production' directory for distribution.
+* Run `gulp stage` to combine HTML partials, convert SASS to CSS, and copy everything into the 'stage' directory
+* Run `gulp watch` to run `gulp stage` then watch files in the 'dev' directory for changes and compile or move them into 'staging' as needed
+* Run `gulp` or `gulp build` to compile, combine, and minify code into 'production' directory for distribution.
 
 ## Directory Structure
 
