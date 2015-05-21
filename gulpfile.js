@@ -85,6 +85,44 @@ gulp.task('stageExtras', function(callback) {
       .pipe(gulp.dest('stage'), callback);
 });
 
+// Watch Tasks
+/*-------------------------------------------------------------------------------------------------*/
+// Empty the 'stage' directory, then watch for file changes
+gulp.task('watch', function(callback) {
+    $.runSequence(
+      'stage',
+      'watchDev',
+      'notify:watchingDev',
+      callback
+   );
+});
+
+// Watch for file changes
+gulp.task('watchDev', function(callback) {
+   // the files to watch followed by the function to run when they change
+   
+   $.watch('dev/**/*.html', function() {
+        gulp.start('htmlInclude');
+    });
+   $.watch('dev/styles/**/*.scss', function() {
+        gulp.start('styles');
+    });
+   $.watch('dev/styles/img/*.*', function() {
+        gulp.start('images');
+    });
+   $.watch('dev/scripts/**/*.js', function() {
+        gulp.start('scripts');
+    });
+   
+   callback();
+});
+
+// Notify when watching dev
+gulp.task('notify:watchingDev', function(callback) {
+   $.notify().write("Watching Dev");
+   callback();
+});
+
 // Production Tasks
 /*-------------------------------------------------------------------------------------------------*/
 // Make 'build' the default task
@@ -140,44 +178,5 @@ gulp.task('prodExtras', function(callback) {
 // Notify when build is complete
 gulp.task('notify:buildComplete', function(callback) {
    $.notify().write("Build Complete");
-   callback();
-});
-
-// Watch Tasks
-/*-------------------------------------------------------------------------------------------------*/
-// Empty the 'stage' directory, then watch for file changes
-gulp.task('watch', function(callback) {
-    $.runSequence(
-      'clean:stage',
-      ['htmlInclude', 'styles', 'images', 'scripts', 'stageExtras'],
-      'watchDev',
-      'notify:watchingDev',
-      callback
-   );
-});
-
-// Watch for file changes
-gulp.task('watchDev', function(callback) {
-   // the files to watch followed by the function to run when they change
-   
-   $.watch('dev/**/*.html', function() {
-        gulp.start('htmlInclude');
-    });
-   $.watch('dev/styles/**/*.scss', function() {
-        gulp.start('styles');
-    });
-   $.watch('dev/styles/img/*.*', function() {
-        gulp.start('images');
-    });
-   $.watch('dev/scripts/**/*.js', function() {
-        gulp.start('scripts');
-    });
-   
-   callback();
-});
-
-// Notify when watching dev
-gulp.task('notify:watchingDev', function(callback) {
-   $.notify().write("Watching Dev");
    callback();
 });
