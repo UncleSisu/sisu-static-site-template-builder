@@ -116,6 +116,11 @@ textarea {
     resize: vertical;
 }
 
+// Prevent jquery click bug on svgs
+svg {
+    pointer-events: none; 
+}
+
 // Helper Classes
 /*-------------------------------------------------------------------------------------------------*/
 // verically align middle
