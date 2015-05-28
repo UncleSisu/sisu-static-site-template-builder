@@ -80,7 +80,7 @@ gulp.task('scripts', function(callback) {
 
 // All other files
 gulp.task('stageExtras', function(callback) {
-   return gulp.src(['dev/**/*.*', '!dev/**/*.html', '!dev/html{,/**}', '!dev/**/*.scss'], { dot: true })
+   return gulp.src(['dev/**/*.*', 'dev/**', '!dev/**/*.html', '!dev/html{,/**}', '!dev/**/*.scss'], { dot: true })
       // copy all other files to stage
       .pipe(gulp.dest('stage'), callback);
 });
@@ -100,18 +100,25 @@ gulp.task('watch', function(callback) {
 // Watch for file changes
 gulp.task('watchDev', function(callback) {
    // the files to watch followed by the function to run when they change
-   
+   // HTML
    $.watch('dev/**/*.html', function() {
         gulp.start('htmlInclude');
     });
+   // SASS
    $.watch('dev/styles/**/*.scss', function() {
         gulp.start('styles');
     });
+   // Images
    $.watch('dev/styles/img/*.*', function() {
         gulp.start('images');
     });
+   // Scripts
    $.watch('dev/scripts/**/*.js', function() {
         gulp.start('scripts');
+    });
+   // Everything else
+   $.watch(['dev/**/*.*', 'dev/**', '!dev/**/*.html', '!dev/html{,/**}', '!dev/**/*.scss'], function() {
+        gulp.start('stageExtras');
     });
    
    callback();
@@ -170,7 +177,7 @@ gulp.task('compile', function(callback) {
 
 // All other files
 gulp.task('prodExtras', function(callback) {
-   return gulp.src(['stage/**/*.*', '!stage/**/*.{html,css,js}', '!stage/html{,/**}', '!stage/scripts/vendor{,/**}'], { dot: true })
+   return gulp.src(['stage/**/*.*', 'stage/**', '!stage/**/*.{html,css,js}', '!stage/html{,/**}', '!stage/scripts/vendor{,/**}'], { dot: true })
       // copy all other files to 'production'
       .pipe(gulp.dest('prod'));
 });
