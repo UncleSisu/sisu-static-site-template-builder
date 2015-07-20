@@ -161,6 +161,10 @@ gulp.task('compile', function(callback) {
    var assets = $.useref.assets();
 
    return gulp.src(['stage/**/*.html', '!stage/html{,/**}'])
+      // remove inline Live Reload script
+      .pipe($.removeLines({'filters': [
+         /<script>document\.write\('<script src="http:\/\/' \+ \(location\.host \|\| 'localhost'\)\.split\(':'\)\[0\] \+ ':35729\/livereload\.js\?snipver=1"><\/' \+ 'script>'\)<\/script>/
+      ]}))
       .pipe(assets)
       // remove console and debugger statments
       .pipe($.if('*.js', $.stripDebug()))
