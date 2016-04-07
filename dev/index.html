@@ -4,7 +4,7 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9 ie8"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-   @@include('html/_head.html', {
+   @@include('./html/_head.html', {
       "title": "Sisu Web Development Template",
       "description": "Starting point for new web development projects",
       "keywords": "template"
@@ -17,7 +17,7 @@
 </head>
    <body>
       <div class="site-container">
-         @@include('html/_header.html')
+         @@include('./html/_header.html')
          <section class="content">
             <h1>Sisu Web Development Template</h1>
             <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
@@ -67,15 +67,18 @@
             <hr>
             <p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
          </section>
-         @@include('html/_footer.html')
+         @@include('./html/_footer.html')
       </div>
       <!-- end site container -->
-      @@include('html/_scripts.html')
+      @@include('./html/_scripts.html')
       
       <!-- Page Specific Scripts -->
       <!-- build:js scripts/home.min.js -->
       <script src="scripts/home.js"></script>
       <!-- endbuild -->
-      <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+      
+      <!-- @ifndef PRODUCTION -->
+      <script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"><\/script>')</script>
+      <!-- @endif -->
    </body>
 </html>

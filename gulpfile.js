@@ -31,7 +31,17 @@ gulp.task('clean:stage', function(callback) {
 gulp.task('htmlInclude', function(callback) {
    return gulp.src(['dev/**/*.html', '!dev/html{,/**}'])
       // compile HTML includes
-      .pipe($.fileInclude())
+      .pipe($.fileInclude({
+         basepath: 'dev/',
+         indent: true
+      }))
+      // prettify the html since the include messes up the indentation
+      .pipe($.prettydiff({
+         lang: "html",
+         mode: "beautify",
+         insize: 3,
+         wrap: 0
+      }))
       // Catch any errors and prevent them from crashing gulp
       .on('error', function (error) {
          $.notify().write(error);
@@ -53,9 +63,18 @@ gulp.task('styles', function(callback) {
          $.notify().write(error);
          this.emit('end');
       })
-      // autoprefix CSS
+      // autoprefix CSS using bootstrap standards
       .pipe($.autoprefixer({
-         browsers: ['last 2 version'],
+         browsers: [
+            "Android 2.3",
+            "Android >= 4",
+            "Chrome >= 20",
+            "Firefox >= 24",
+            "Explorer >= 8",
+            "iOS >= 6",
+            "Opera >= 12",
+            "Safari >= 6"
+         ],
          remove: false
       }))
       // Write final .map file
@@ -161,19 +180,21 @@ gulp.task('compile', function(callback) {
    var assets = $.useref.assets();
 
    return gulp.src(['stage/**/*.html', '!stage/html{,/**}'])
-      // remove inline Live Reload script
-      .pipe($.removeLines({'filters': [
-         /<script>document\.write\('<script src="http:\/\/' \+ \(location\.host \|\| 'localhost'\)\.split\(':'\)\[0\] \+ ':35729\/livereload\.js\?snipver=1"><\/' \+ 'script>'\)<\/script>/
-      ]}))
+      // use production mode
+      .pipe($.preprocess({context: {PRODUCTION: true}}))
+      // get userref assets
       .pipe(assets)
       // remove console and debugger statments
       .pipe($.if('*.js', $.stripDebug()))
       // minify Javascript
       .pipe($.if('*.js', $.uglify()))
       // minify CSS
-      .pipe($.if('*.css', $.minifyCss()))
-      // combine CSS and Javascript into individual files
+      .pipe($.if('*.css', $.cleanCss({
+         processImport: false
+      })))
+      // restor userref assets
       .pipe(assets.restore())
+      // combine CSS and Javascript into individual files
       .pipe($.useref())
       // move files to production
       .pipe(gulp.dest('prod'), callback);
