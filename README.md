@@ -1,6 +1,6 @@
 # Sisu Static Site Template Builder
 
-## Features
+## Using
 * JQuery, JQuery Easing
 * Modernizr test for touch devices
 * box-sizing: border-box;
@@ -8,7 +8,7 @@
 * Sourcemaping on Sass
 
 
-## Requirements
+## Build Requirements
 * [Node & Node Package Manager (NPM)](http://nodejs.org/)
 
 ## Installation
@@ -24,7 +24,7 @@ To install new Gulp dependecies run `npm install --save-dev <package-name>`
 
 You can search a list of available packages here: https://www.npmjs.org/search?q=gulp
 
-## Gulp
+## Gulp Commands
 
 Run the following commands in terminal/console as needed. Read comments in `gulpfile.js` for more details.
 
