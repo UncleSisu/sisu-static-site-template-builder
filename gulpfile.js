@@ -162,6 +162,7 @@ gulp.task('build', function(callback) {
       ['clean:prod','clean:stage'],
       ['htmlInclude', 'styles', 'scripts', 'stageExtras'],
       'compile',
+      ['minifyJS','minifyCSS'],
       'prodExtras',
       'notify:buildComplete',
       callback
@@ -175,34 +176,41 @@ gulp.task('clean:prod', function(callback) {
   ], callback);
 });
 
-// Minify and Combine JS and CSS files and change paths in HTML to new files
+// Combine JS and CSS files and change paths in HTML to new files
 gulp.task('compile', function(callback) {
-   var assets = $.useref.assets();
-
    return gulp.src(['stage/**/*.html', '!stage/html{,/**}'])
       // use production mode
       .pipe($.preprocess({context: {PRODUCTION: true}}))
       // get userref assets
-      .pipe(assets)
-      // remove console and debugger statments
-      .pipe($.if('*.js', $.stripDebug()))
-      // minify Javascript
-      .pipe($.if('*.js', $.uglify()))
-      // minify CSS
-      .pipe($.if('*.css', $.cleanCss({
-         processImport: false
-      })))
-      // restor userref assets
-      .pipe(assets.restore())
-      // combine CSS and Javascript into individual files
       .pipe($.useref())
+      // move files to production
+      .pipe(gulp.dest('prod'), callback);
+});
+
+// Minify JS
+gulp.task('minifyJS', function(callback) {
+   return gulp.src(['prod/**/*.js'])
+      // remove console and debugger statments
+      .pipe($.stripDebug())
+      // minify Javascript
+      .pipe($.uglify())
+      // move files to production
+      .pipe(gulp.dest('prod'), callback);
+});
+
+gulp.task('minifyCSS', function(callback) {
+   return gulp.src(['prod/**/*.css'])
+      // minify CSS
+      .pipe($.cleanCss({
+         processImport: false
+      }))
       // move files to production
       .pipe(gulp.dest('prod'), callback);
 });
 
 // All other files
 gulp.task('prodExtras', function(callback) {
-   return gulp.src(['stage/**/*.*', 'stage/**', '!stage/**/*.{html,css,js}', '!stage/html{,/**}', '!stage/scripts/vendor{,/**}'], { dot: true })
+   return gulp.src(['stage/**/*.*', 'stage/**', '!stage/**/*.{html,css,js}', '!stage/html{,/**}', '!stage/styles{,/**}', '!stage/scripts{,/**}'], { dot: true })
       // copy all other files to 'production'
       .pipe(gulp.dest('prod'));
 });

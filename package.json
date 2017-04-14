@@ -25,7 +25,7 @@
     "gulp-sourcemaps": "^1.5.2",
     "gulp-strip-debug": "^1.0.2",
     "gulp-uglify": "^0.2.1",
-    "gulp-useref": "^1.1.2",
+    "gulp-useref": "^3.1.2",
     "gulp-watch": "^4.2.4",
     "run-sequence": "^1.1.0"
   },
